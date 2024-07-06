@@ -1,0 +1,72 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
+
+namespace ConsoleApp1
+{
+    class Person
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+        public float Height { get; set; }
+        
+    }
+
+    class PersonManager
+    {
+        private IEnumerable<Person> people;
+
+        public PersonManager(IEnumerable<Person> initialPeople)
+        {
+            people = initialPeople;
+        }
+
+        public IEnumerable<Person> GetPeopleByAge(int age)
+        {
+            return people.Where(n => n.Age == age || n.Age  > age);
+        }
+
+        public IEnumerable<Person> GetPeopleSortedByName(string name)
+        {
+            return people.OrderByDescending(n => n.Name);
+        }
+
+        
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            List<Person> personList = new List<Person>
+            {
+                new Person {Name = "ALice", Age = 25, Height = 12.4f}, 
+                new Person {Name = "Bob", Age = 34, Height = 14.3f},
+                new Person {Name = "Marley", Age = 25, Height = 12.4f}
+            };
+
+            // Create an instance of the PersonManager class with the list
+            PersonManager manager = new PersonManager(personList);
+
+            Console.WriteLine("Filtering");
+
+            IEnumerable<Person> peopleByAge = manager.GetPeopleByAge(25);
+            Console.WriteLine("People Aged 25: ");
+            foreach(var person in peopleByAge)
+            {
+                Console.WriteLine($"{person.Name}, Age: {person.Age}");
+            }
+
+            Console.WriteLine("Sorting");
+
+            IEnumerable<Person> sortByName = manager.GetPeopleSortedByName("Alice");
+            foreach(var person2 in sortByName)
+            {
+                Console.WriteLine($"{person2.Name}, Age: {person2.Age}");
+            }
+            
+            Console.ReadLine();
+        }
+    }
+
+}
